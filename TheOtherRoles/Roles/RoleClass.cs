@@ -36,7 +36,6 @@ public static class RoleClass
         Shifter.clearAndReload();
         Swapper.clearAndReload();
         Lovers.clearAndReload();
-        Seer.clearAndReload();
         Morphling.clearAndReload();
         Camouflager.clearAndReload();
         Cultist.clearAndReload();
@@ -80,8 +79,10 @@ public static class RoleClass
         Yoyo.clearAndReload();
         EvilTrapper.clearAndReload();
         Survivor.clearAndReload();
+        Vigilante.clearAndReload();
 
         // Modifier
+        Assassin.clearAndReload();
         Bait.clearAndReload();
         Bloody.clearAndReload();
         AntiTeleport.clearAndReload();
@@ -114,30 +115,6 @@ public static class RoleClass
         blockRole();
     }
 
-    public static void FixedUpdate(PlayerControl player)
-    {
-        Role.allRoles.DoIf(x => x.player == player, x => x.FixedUpdate());
-    }
-
-    public static void OnMeetingStart()
-    {
-        Role.allRoles.Do(x => x.OnMeetingStart());
-
-        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
-        {
-            if (p == 1)
-            {
-                Camouflager.resetCamouflage();
-                Morphling.resetMorph();
-            }
-        })));
-    }
-
-    public static void OnMeetingEnd()
-    {
-        Role.allRoles.Do(x => x.OnMeetingEnd());
-    }
-
     public static class Crew
     {
         public static PlayerControl crew;
@@ -148,7 +125,25 @@ public static class RoleClass
             crew = null;
         }
     }
+    /*
+    [HarmonyPatch(typeof(GameData), nameof(GameData.HandleDisconnect), [typeof(PlayerControl), typeof(DisconnectReasons)])]
+    private class HandleDisconnectPatch
+    {
+        public static void Postfix(GameData __instance, PlayerControl player, DisconnectReasons reason)
+        {
+            if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
+            {
+                Role.allRoles.Do(x => x.HandleDisconnect(player, reason));
+                //Modifier.allModifiers.Do(x => x.HandleDisconnect(player, reason));
 
+                //Lovers.HandleDisconnect(player, reason);
+                //Shifter.HandleDisconnect(player, reason);
+
+                //finalStatuses[player.PlayerId] = FinalStatus.Disconnected;
+            }
+        }
+    }
+    */
     internal static Dictionary<byte, byte[]> blockedRolePairings = [];
 
     public static void blockRole()

@@ -1099,7 +1099,7 @@ public class CustomOptionHolder
 
         //-------------------------- Crewmate Options 30000-39999 -------------------------- //
 
-        guesserSpawnRate = Create(30100, Types.Crewmate, cs(Guesser.color, "Vigilante"), rates, null, true);
+        guesserSpawnRate = Create(30100, Types.Crewmate, cs(Vigilante.color, "Vigilante"), rates, null, true);
         guesserNumberOfShots = Create(30101, Types.Crewmate, "guesserNumberOfShots", 3f, 1f, 15f, 1f, guesserSpawnRate);
         guesserHasMultipleShotsPerMeeting = Create(30102, Types.Crewmate, "guesserHasMultipleShotsPerMeeting", true, guesserSpawnRate);
         guesserShowInfoInGhostChat = Create(30103, Types.Crewmate, "guesserShowInfoInGhostChat", true, guesserSpawnRate);
@@ -1383,9 +1383,9 @@ public class CustomOptionHolder
 
         //-------------------------- Guesser Gamemode 2000 - 2999 -------------------------- //
 
-        guesserGamemodeCrewNumber = Create(2001, Types.Guesser, cs(Guesser.color, "guesserGamemodeCrewNumber"), 3f, 0f, 15f, 1f, null, true);
-        guesserGamemodeNeutralNumber = Create(2002, Types.Guesser, cs(Guesser.color, "guesserGamemodeNeutralNumber"), 3f, 0f, 15f, 1f);
-        guesserGamemodeImpNumber = Create(2003, Types.Guesser, cs(Guesser.color, "guesserGamemodeImpNumber"), 3f, 0f, 15f, 1f);
+        guesserGamemodeCrewNumber = Create(2001, Types.Guesser, cs(Color.yellow, "guesserGamemodeCrewNumber"), 3f, 0f, 15f, 1f, null, true);
+        guesserGamemodeNeutralNumber = Create(2002, Types.Guesser, cs(Color.yellow, "guesserGamemodeNeutralNumber"), 3f, 0f, 15f, 1f);
+        guesserGamemodeImpNumber = Create(2003, Types.Guesser, cs(Color.yellow, "guesserGamemodeImpNumber"), 3f, 0f, 15f, 1f);
         guesserForceJackalGuesser = Create(2007, Types.Guesser, "guesserForceJackalGuesser", false, null, true);
         guesserGamemodeSidekickIsAlwaysGuesser = Create(2012, Types.Guesser, "guesserGamemodeSidekickIsAlwaysGuesser", false);
         guesserForcePavlovsGuesser = Create(2013, Types.Guesser, "guesserForcePavlovsGuesser", false);

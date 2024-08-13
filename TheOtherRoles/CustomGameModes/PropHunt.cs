@@ -753,7 +753,7 @@ public static class PropSpeedFix
         if (__instance != null
             && __instance.AmOwner
             && GameData.Instance
-            && !CachedPlayer.LocalPlayer.Data.IsDead
+            && !CachedPlayer.LocalPlayer.IsDead
             && __instance.myPlayer.CanMove
             && PropHunt.isPropHuntGM)
         {

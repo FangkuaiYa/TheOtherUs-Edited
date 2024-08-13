@@ -88,7 +88,7 @@ public class VitalsPatch
                 }
 
                 if (MapOption.restrictVitalsTime <= 0f && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker &&
-                    !CachedPlayer.LocalPlayer.Data.IsDead)
+                    !CachedPlayer.LocalPlayer.IsDead)
                 {
                     __instance.Close();
                     return false;

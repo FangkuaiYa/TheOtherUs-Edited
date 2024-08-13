@@ -140,7 +140,7 @@ public class Trap
             target = trap;
         }
 
-        if (target != null && player.PlayerId != Trapper.trapper.PlayerId && !player.Data.IsDead)
+        if (target != null && player.PlayerId != Trapper.trapper.PlayerId && !player.IsDead)
         {
             var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                 (byte)CustomRPC.TriggerTrap, SendOption.Reliable);
@@ -151,7 +151,7 @@ public class Trap
         }
 
 
-        if (!player.Data.IsDead || player.PlayerId == Trapper.trapper.PlayerId) return;
+        if (!player.IsDead || player.PlayerId == Trapper.trapper.PlayerId) return;
         foreach (var trap in traps.Where(trap => !trap.trap.active))
             trap.trap.SetActive(true);
     }

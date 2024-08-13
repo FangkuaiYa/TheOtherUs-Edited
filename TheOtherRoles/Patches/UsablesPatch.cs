@@ -137,7 +137,7 @@ public static class VentUsePatch
 
         bool canUse;
         bool couldUse;
-        __instance.CanUse(CachedPlayer.LocalPlayer.Data, out canUse, out couldUse);
+        __instance.CanUse(CachedPlayer.LocalPlayer.PlayerInfo, out canUse, out couldUse);
         var canMoveInVents = CachedPlayer.LocalPlayer.PlayerControl != Spy.spy &&
                              !Trapper.playersOnMap.Contains(CachedPlayer.LocalPlayer.PlayerControl);
         if (!canUse) return false; // No need to execute the native method as using is disallowed anyways
@@ -160,9 +160,9 @@ public static class VentUsePatch
         }
 
         if (isEnter)
-            CachedPlayer.LocalPlayer.PlayerPhysics.RpcEnterVent(__instance.Id);
+            CachedPlayer.LocalPlayer.Physics.RpcEnterVent(__instance.Id);
         else
-            CachedPlayer.LocalPlayer.PlayerPhysics.RpcExitVent(__instance.Id);
+            CachedPlayer.LocalPlayer.Physics.RpcExitVent(__instance.Id);
         __instance.SetButtons(isEnter && canMoveInVents);
         return false;
     }
@@ -295,7 +295,7 @@ internal class KillButtonDoClickPatch
         }
 
         if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown &&
-            !CachedPlayer.LocalPlayer.Data.IsDead && CachedPlayer.LocalPlayer.PlayerControl.CanMove)
+            !CachedPlayer.LocalPlayer.IsDead && CachedPlayer.LocalPlayer.PlayerControl.CanMove)
         {
             // Deputy handcuff update.
             if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerId))
@@ -800,7 +800,7 @@ internal class SurveillanceMinigamePatch
         var ignoreNightVision =
             (CustomOptionHolder.camsNoNightVisionIfImpVision.getBool() &&
              hasImpVision(GameData.Instance.GetPlayerById(CachedPlayer.LocalPlayer.PlayerId))) ||
-            CachedPlayer.LocalPlayer.Data.IsDead;
+            CachedPlayer.LocalPlayer.IsDead;
         var nightVisionEnabled = CustomOptionHolder.camsNightVision.getBool();
 
         if (isLightsOut && !nightVisionIsActive && nightVisionEnabled && !ignoreNightVision)

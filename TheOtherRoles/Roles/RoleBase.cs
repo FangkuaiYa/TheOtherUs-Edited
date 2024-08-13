@@ -1,83 +1,69 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Roles;
 
-public abstract class Role
+public abstract class RoleBase : IDisposable
 {
-    public static List<Role> allRoles = new();
-    public PlayerControl player;
-    public RoleId roleId;
 
-    public abstract void OnMeetingStart();
-    public abstract void OnMeetingEnd();
-    public abstract void FixedUpdate();
-    public abstract void OnKill(PlayerControl target);
-    public abstract void OnDeath(PlayerControl killer = null);
-    public abstract void OnFinishShipStatusBegin();
-    public abstract void HandleDisconnect(PlayerControl player, DisconnectReasons reason);
-    public virtual void ResetRole() { }
-    public virtual void PostInit() { }
-    public virtual string modifyNameText(string nameText) { return nameText; }
-    public virtual string meetingInfoText() { return ""; }
+    public int RoleIndex => CustomRoleManager.Instance._RoleBases.IndexOf(this);
 
-    public static void ClearAll()
+    public string ReadmeText = string.Empty;
+
+    public abstract RoleInfo RoleInfo { get; protected set; }
+    //public abstract CustomRoleOption roleOption { get; set; }
+    public List<RoleControllerBase> Controllers { get; protected set; } = [];
+    public string ClassName => RoleInfo.RoleClassType.Name;
+    public Type ClassType => RoleInfo.RoleClassType;
+
+    public RoleTeam Team => RoleInfo.RoleTeam;
+
+    public virtual bool CanUseVent { get; set; } = false;
+    public virtual bool EnableAssign { get; set; } = true;
+    public virtual bool IsVanilla { get; set; } = false;
+    public virtual bool HasImpostorVision { get; set; } = false;
+    public virtual bool IsKiller { get; set; } = false;
+    public virtual bool IsEvil { get; set; } = false;
+    public virtual bool HasTask { get; set; } = true;
+    public virtual bool CanDoTask { get; set; } = true;
+
+    public virtual void Dispose()
     {
-        allRoles = new List<Role>();
     }
+
+    public virtual bool CanAssign()
+    {
+        return true;
+    }
+
+    public virtual void ClearAndReload()
+    {
+    }
+
+    public virtual void OptionCreate()
+    {
+    }
+
+    public virtual void ButtonCreate(HudManager manager)
+    {
+    }
+
+
+    public virtual void ResetCustomButton()
+    {
+    }
+#nullable enable
+    public Type? PathType { get; protected set; } = null;
 }
 
-
-[HarmonyPatch]
-public abstract class RoleBase<T> : Role where T : RoleBase<T>, new()
+public abstract class VanillaRole : RoleBase
 {
-    public static List<T> players = new();
-    public static RoleId RoleType;
-    public static T local => players.FirstOrDefault(x => x.player == CachedPlayer.LocalPlayer.PlayerControl);
-    public static List<PlayerControl> allPlayers => players.Select(x => x.player).ToList();
-    public static List<PlayerControl> livingPlayers => players.Select(x => x.player).Where(x => x.IsAlive()).ToList();
-    public static List<PlayerControl> deadPlayers => players.Select(x => x.player).Where(x => !x.IsDead()).ToList();
-    //public static bool exists => Helpers.RolesEnabled && players.Count > 0;
+    public override bool IsVanilla { get; set; } = true;
+    public virtual Type? RoleType { get; set; }
+    public RoleBehaviour? RoleBehaviour { get; set; }
+}
 
-
-    public void Init(PlayerControl player)
-    {
-        this.player = player;
-        players.Add((T)this);
-        allRoles.Add(this);
-    }
-
-    public static T getRole(PlayerControl player = null)
-    {
-        player ??= CachedPlayer.LocalPlayer.PlayerControl;
-        return players.FirstOrDefault(x => x.player == player);
-    }
-
-    public static bool isRole(PlayerControl player) => players.Any(x => x.player == player);
-
-    public static void setRole(PlayerControl player)
-    {
-        if (!isRole(player))
-        {
-            T role = new();
-            role.Init(player);
-        }
-    }
-
-    public static void eraseRole(PlayerControl player)
-    {
-        players.DoIf(x => x.player == player, x => x.ResetRole());
-        players.RemoveAll(x => x.player == player && x.roleId == RoleType);
-        allRoles.RemoveAll(x => x.player == player && x.roleId == RoleType);
-    }
-
-    public static void swapRole(PlayerControl p1, PlayerControl p2)
-    {
-        var index = players.FindIndex(x => x.player == p1);
-        if (index >= 0)
-        {
-            players[index].player = p2;
-        }
-    }
+public interface Invisable
+{
+    public bool isInvisable { get; set; }
 }

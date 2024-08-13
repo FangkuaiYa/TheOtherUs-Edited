@@ -263,7 +263,7 @@ internal class MeetingHudPatch
 
             var passiveButton = meetingExtraButton.GetComponent<PassiveButton>();
             passiveButton.OnClick.RemoveAllListeners();
-            if (!CachedPlayer.LocalPlayer.Data.IsDead)
+            if (!CachedPlayer.LocalPlayer.IsDead)
             {
                 if (addSwapperButtons)
                     passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
@@ -302,7 +302,7 @@ internal class MeetingHudPatch
 
         // Add Guesser Buttons
         var GuesserRemainingShots = HandleGuesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId);
-        if (!isGuesser || CachedPlayer.LocalPlayer.Data.IsDead || GuesserRemainingShots <= 0) return;
+        if (!isGuesser || CachedPlayer.LocalPlayer.IsDead || GuesserRemainingShots <= 0) return;
         {
             Doomsayer.CanShoot = true;
             for (var i = 0; i < __instance.playerStates.Length; i++)
@@ -569,10 +569,10 @@ internal class MeetingHudPatch
         {
             var spriteRenderer = Object.Instantiate(__instance.PlayerVotePrefab);
             var showVoteColors = !GameManager.Instance.LogicOptions.GetAnonymousVotes() ||
-                                 (CachedPlayer.LocalPlayer.Data.IsDead && ghostsSeeVotes) ||
+                                 (CachedPlayer.LocalPlayer.IsDead && ghostsSeeVotes) ||
                                  (Prosecutor.prosecutor != null && Prosecutor.prosecutor == CachedPlayer.LocalPlayer.PlayerControl &&
                                   Prosecutor.canSeeVoteColors &&
-                                  TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >=
+                                  TasksHandler.taskInfo(CachedPlayer.LocalPlayer.PlayerInfo).Item1 >=
                                   Prosecutor.tasksNeededToSeeVoteColors) ||
                                  (Watcher.watcher != null && CachedPlayer.LocalPlayer.PlayerControl == Watcher.watcher);
             if (showVoteColors && !Prosecutor.ProsecuteThisMeeting)
@@ -794,7 +794,7 @@ internal class MeetingHudPatch
             // Resett Bait list
             Bait.active = new Dictionary<DeadPlayer, float>();
             // Save AntiTeleport position, if the player is able to move (i.e. not on a ladder or a gap thingy)
-            if (CachedPlayer.LocalPlayer.PlayerPhysics.enabled && (CachedPlayer.LocalPlayer.PlayerControl.moveable
+            if (CachedPlayer.LocalPlayer.Physics.enabled && (CachedPlayer.LocalPlayer.PlayerControl.moveable
                                                                    || CachedPlayer.LocalPlayer.PlayerControl.inVent
                                                                    || HudManagerStartPatch.hackerVitalsButton.isEffectActive
                                                                    || HudManagerStartPatch.hackerAdminTableButton.isEffectActive
@@ -882,7 +882,6 @@ internal class MeetingHudPatch
 
             // Close In-Game Settings Display if open
             HudManagerUpdate.CloseSettings();
-
         }
     }
 

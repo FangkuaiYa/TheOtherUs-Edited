@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Reflection;
 using TheOtherRoles.Modules;
+using static UnityEngine.GraphicsBuffer;
 
 namespace TheOtherRoles.Roles.Modifier;
 public static class Shifter
@@ -17,10 +19,10 @@ public static class Shifter
 
     public static void shiftRole(PlayerControl player1, PlayerControl player2, bool repeat = true)
     {
-        if (Guesser.niceGuesser != null && Guesser.niceGuesser == player2)
+        if (Vigilante.vigilante != null && Vigilante.vigilante == player2)
         {
             if (repeat) shiftRole(player2, player1, false);
-            Guesser.niceGuesser = player1;
+            Vigilante.vigilante = player1;
         }
         else if (Mayor.mayor != null && Mayor.mayor == player2)
         {
@@ -100,11 +102,6 @@ public static class Shifter
         {
             if (repeat) shiftRole(player2, player1, false);
             Swapper.swapper = player1;
-        }
-        else if (Seer.seer != null && Seer.seer == player2)
-        {
-            if (repeat) shiftRole(player2, player1, false);
-            Seer.seer = player1;
         }
         else if (Hacker.hacker != null && Hacker.hacker == player2)
         {

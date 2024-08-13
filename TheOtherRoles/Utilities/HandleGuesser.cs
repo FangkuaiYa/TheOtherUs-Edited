@@ -41,7 +41,6 @@ public static class HandleGuesser
 
     public static void clearAndReload()
     {
-        Guesser.clearAndReload();
         GuesserGM.clearAndReload();
         isGuesserGm = MapOption.gameMode == CustomGamemodes.Guesser;
         if (isGuesserGm)

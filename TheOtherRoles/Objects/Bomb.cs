@@ -92,7 +92,7 @@ public class Bomb
             // every player only checks that for their own client (desynct with positions sucks)
             var distance = Vector2.Distance(position, CachedPlayer.LocalPlayer.transform.position);
 
-            if (distance <= Terrorist.destructionRange && !CachedPlayer.LocalPlayer.Data.IsDead)
+            if (distance <= Terrorist.destructionRange && !CachedPlayer.LocalPlayer.IsDead)
             {
                 if (Terrorist.selfExplosion && CachedPlayer.LocalPlayer.PlayerControl == Terrorist.terrorist)
                 {

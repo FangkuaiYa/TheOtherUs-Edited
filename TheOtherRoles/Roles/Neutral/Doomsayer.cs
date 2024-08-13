@@ -55,7 +55,7 @@ public static class Doomsayer
             {
                 var info = allRoleInfo[temp[tempNum]];
 
-                message.Append(num == x ? roleInfoTarget.name : info.name);
+                message.Append(num == x ? roleInfoTarget.name : info.Name);
                 message.Append(num < formation - 1 ? ", " : ';');
             }
 

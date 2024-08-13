@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
 using TheOtherRoles.CustomGameModes;
@@ -18,8 +19,8 @@ public static class HauntMenuMinigamePatch
     {
         if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal) return;
         var target = __instance.HauntTarget;
-        var roleInfo = RoleInfo.getRoleInfoForPlayer(target, false);
-        var roleString = roleInfo.Count > 0 && MapOption.ghostsSeeRoles ? roleInfo[0].name : "";
+        List<RoleInfo> roleInfo = RoleInfo.getRoleInfoForPlayer(target, false);
+        var roleString = roleInfo.Count > 0 && MapOption.ghostsSeeRoles ? roleInfo[0].Name : "";
         if (__instance.HauntTarget.Data.IsDead)
         {
             __instance.FilterText.text = roleString + " Ghost";
@@ -38,7 +39,7 @@ public static class HauntMenuMinigamePatch
         if (__instance.filterMode == HauntMenuMinigame.HauntFilters.Impostor)
         {
             var info = RoleInfo.getRoleInfoForPlayer(pc, false);
-            __result = (pc.Data.Role.IsImpostor || info.Any(x => x.roleTeam == RoleTeam.Neutral)) && !pc.Data.IsDead;
+            __result = (pc.Data.Role.IsImpostor || info.Any(x => x.RoleTeam == RoleTeam.Neutral)) && !pc.Data.IsDead;
         }
     }
 
@@ -73,7 +74,7 @@ public static class HauntMenuMinigamePatch
     public static void UpdatePostfix(HauntMenuMinigame __instance)
     {
         if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal) return;
-        if (CachedPlayer.LocalPlayer.Data.Role.IsImpostor && Vampire.vampire != CachedPlayer.LocalPlayer.PlayerControl)
+        if (CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor && Vampire.vampire != CachedPlayer.LocalPlayer.PlayerControl)
             __instance.gameObject.transform.localPosition =
                 new Vector3(-6f, -1.1f, __instance.gameObject.transform.localPosition.z);
     }
@@ -84,11 +85,11 @@ public static class HauntMenuMinigamePatch
     {
         var isGameMode = GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek ||
                          PropHunt.isPropHuntGM || HideNSeek.isHideNSeekGM;
-        if (CachedPlayer.LocalPlayer.Data.IsDead &&
+        if (CachedPlayer.LocalPlayer.IsDead &&
             (CustomOptionHolder.finishTasksBeforeHauntingOrZoomingOut.getBool() || isGameMode))
         {
             // player has haunt button.
-            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
+            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.PlayerInfo);
             var numberOfLeftTasks = playerTotal - playerCompleted;
             if (numberOfLeftTasks <= 0 || isGameMode)
                 __instance.Show();

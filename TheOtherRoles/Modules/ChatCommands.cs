@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hazel;
 using InnerNet;
@@ -65,7 +66,7 @@ public static class ChatCommands
             if (chat.StartsWith("/kick ") && AmongUsClient.Instance.AmHost)
             {
                 var playerName = text[6..];
-                PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.PlayerName.Equals(playerName));
                 if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan())
                 {
                     var client = AmongUsClient.Instance.GetClient(target.OwnerId);
@@ -79,7 +80,7 @@ public static class ChatCommands
             else if (chat.StartsWith("/ban ") && AmongUsClient.Instance.AmHost)
             {
                 var playerName = text[5..];
-                PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.PlayerName.Equals(playerName));
                 if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan())
                 {
                     var client = AmongUsClient.Instance.GetClient(target.OwnerId);
@@ -113,7 +114,7 @@ public static class ChatCommands
                     var playerName = text[6..];
                     var target = playerName is not null and "me"
                         ? CachedPlayer.LocalPlayer.PlayerControl
-                        : (PlayerControl)CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                        : (PlayerControl)CachedPlayer.AllPlayers.FirstOrDefault(x => x.PlayerName.Equals(playerName));
                     if (target != null)
                     {
                         target.Exiled();
@@ -126,7 +127,7 @@ public static class ChatCommands
                     var playerName = text[8..];
                     var target = playerName is not null and "me"
                         ? CachedPlayer.LocalPlayer.PlayerControl
-                        : (PlayerControl)CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                        : (PlayerControl)CachedPlayer.AllPlayers.FirstOrDefault(x => x.PlayerName.Equals(playerName));
                     if (target != null)
                     {
                         var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
@@ -142,12 +143,12 @@ public static class ChatCommands
             // 游戏中玩家指令
             if (chat.StartsWith("/m") && InGame)
             {
-                var localRole = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
+                List<RoleInfo> localRole = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
                 for (var i = 0; i < localRole.Count; i++)
                 {
-                    var roleInfo = RoleInfo.getRoleDescription(localRole[i].name);
+                    var roleInfo = RoleInfo.getRoleDescription(localRole[i].Name);
 
-                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{localRole[i].name}:\n {roleInfo}\n");
+                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{localRole[i].Name}:\n {roleInfo}\n");
 
                 }
                 handled = true;
@@ -167,7 +168,7 @@ public static class ChatCommands
                 if (text.ToLower().Equals("/murder"))
                 {
                     CachedPlayer.LocalPlayer.PlayerControl.Exiled();
-                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(CachedPlayer.LocalPlayer.Data, CachedPlayer.LocalPlayer.Data);
+                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(CachedPlayer.LocalPlayer.PlayerInfo, CachedPlayer.LocalPlayer.PlayerInfo);
                     handled = true;
                 }
                 else if (chat.StartsWith("/color "))
@@ -182,11 +183,11 @@ public static class ChatCommands
             }
 
             // 死亡玩家指令
-            if (chat.StartsWith("/tp ") && CachedPlayer.LocalPlayer.Data.IsDead)
+            if (chat.StartsWith("/tp ") && CachedPlayer.LocalPlayer.IsDead)
             {
                 var playerName = text[4..].ToLower();
                 PlayerControl target =
-                    CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
+                    CachedPlayer.AllPlayers.FirstOrDefault(x => x.PlayerName.ToLower().Equals(playerName));
                 if (target != null)
                 {
                     CachedPlayer.LocalPlayer.transform.position = target.transform.position;
@@ -249,7 +250,7 @@ public static class ChatCommands
             var sourcePlayer = PlayerControl.AllPlayerControls.ToArray().ToList()
                 .FirstOrDefault(x => x.Data != null && x.Data.PlayerName.Equals(playerName, StringComparison.Ordinal));
 
-            if (CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor && __instance != null
+            if (CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor && __instance != null
                  && ((Spy.spy != null && sourcePlayer.PlayerId == Spy.spy.PlayerId)
                  || (Sidekick.sidekick != null && Sidekick.wasTeamRed && sourcePlayer.PlayerId == Sidekick.sidekick.PlayerId)
                  || (Jackal.jackal != null && Jackal.wasTeamRed && sourcePlayer.PlayerId == Jackal.jackal.PlayerId)))

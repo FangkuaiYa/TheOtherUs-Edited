@@ -12,68 +12,33 @@ namespace TheOtherRoles.Roles;
 
 public static class Guesser
 {
-    public static PlayerControl niceGuesser;
-
-    public static List<PlayerControl> evilGuesser = new();
-    public static Color color = new Color32(255, 255, 0, byte.MaxValue);
-
-    public static bool guesserCantGuessSnitch;
-    public static bool showInfoInGhostChat = true;
-    public static bool killsThroughShield = true;
-    public static int remainingShotsNiceGuesser = 2;
-    public static bool hasMultipleShotsPerMeeting;
-
-    public static int remainingShotsEvilGuesser = 2;
-    public static bool assassinMultipleShotsPerMeeting;
-    public static bool assassinKillsThroughShield = true;
-    public static bool evilGuesserCanGuessSpy = true;
-    public static bool evilGuesserCanGuessCrewmate = true;
-
     public static bool isGuesser(byte playerId)
     {
-        if (evilGuesser.Any(item => item.PlayerId == playerId && evilGuesser != null)) return true;
+        if (Assassin.assassin.Any(item => item.PlayerId == playerId && Assassin.assassin != null)) return true;
 
-        return niceGuesser != null && niceGuesser.PlayerId == playerId;
+        return Vigilante.vigilante != null && Vigilante.vigilante.PlayerId == playerId;
     }
 
     public static void clear(byte playerId)
     {
-        if (niceGuesser != null && niceGuesser.PlayerId == playerId) niceGuesser = null;
-        foreach (var item in evilGuesser.Where(item => item.PlayerId == playerId && evilGuesser != null))
-            evilGuesser = null;
+        if (Vigilante.vigilante != null && Vigilante.vigilante.PlayerId == playerId) Vigilante.vigilante = null;
+        foreach (var item in Assassin.assassin.Where(item => item.PlayerId == playerId && Assassin.assassin != null))
+            Assassin.assassin = null;
     }
 
     public static int remainingShots(byte playerId, bool shoot = false)
     {
-        var result = remainingShotsEvilGuesser;
-        if (niceGuesser != null && niceGuesser.PlayerId == playerId)
+        var result = Assassin.remainingShotsEvilGuesser;
+        if (Vigilante.vigilante != null && Vigilante.vigilante.PlayerId == playerId)
         {
-            result = remainingShotsNiceGuesser;
-            if (shoot) remainingShotsNiceGuesser = Mathf.Max(0, remainingShotsNiceGuesser - 1);
+            result = Vigilante.remainingShotsNiceGuesser;
+            if (shoot) Vigilante.remainingShotsNiceGuesser = Mathf.Max(0, Vigilante.remainingShotsNiceGuesser - 1);
         }
         else if (shoot)
         {
-            remainingShotsEvilGuesser = Mathf.Max(0, remainingShotsEvilGuesser - 1);
+            Assassin.remainingShotsEvilGuesser = Mathf.Max(0, Assassin.remainingShotsEvilGuesser - 1);
         }
         return result;
-    }
-
-    public static void clearAndReload()
-    {
-        niceGuesser = null;
-        evilGuesser = new List<PlayerControl>();
-
-        guesserCantGuessSnitch = CustomOptionHolder.guesserCantGuessSnitchIfTaksDone.getBool();
-        showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
-        killsThroughShield = CustomOptionHolder.guesserKillsThroughShield.getBool();
-        remainingShotsNiceGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
-        hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
-
-        remainingShotsEvilGuesser = Mathf.RoundToInt(CustomOptionHolder.modifierAssassinNumberOfShots.getFloat());
-        assassinMultipleShotsPerMeeting = CustomOptionHolder.modifierAssassinMultipleShotsPerMeeting.getBool();
-        assassinKillsThroughShield = CustomOptionHolder.modifierAssassinKillsThroughShield.getBool();
-        evilGuesserCanGuessSpy = CustomOptionHolder.guesserEvilCanKillSpy.getBool();
-        evilGuesserCanGuessCrewmate = CustomOptionHolder.guesserEvilCanKillCrewmate.getBool();
     }
 
     public const int MaxOneScreenRole = 40;
@@ -152,7 +117,7 @@ public static class Guesser
             __instance.playerStates.ForEach(x =>
             {
                 x.gameObject.SetActive(true);
-                if (CachedPlayer.LocalPlayer.Data.IsDead && x.transform.FindChild("ShootButton") != null)
+                if (CachedPlayer.LocalPlayer.IsDead && x.transform.FindChild("ShootButton") != null)
                     Object.Destroy(x.transform.FindChild("ShootButton").gameObject);
             });
             Object.Destroy(container.gameObject);
@@ -256,51 +221,51 @@ public static class Guesser
         int ind = 0;
 
         #region 职业排除规则
-        foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos)
+        foreach (RoleInfo roleInfo in RoleInfo.AllRoleInfo)
         {
 
             if (roleInfo == null) continue; // Not guessable roles
 
-            var guesserRole = niceGuesser != null && CachedPlayer.LocalPlayer.PlayerId == niceGuesser.PlayerId
-                ? RoleId.NiceGuesser
-                : RoleId.EvilGuesser;
+            var guesserRole = Vigilante.vigilante != null && CachedPlayer.LocalPlayer.PlayerId == Vigilante.vigilante.PlayerId
+                ? RoleId.Vigilante
+                : RoleId.Assassin;
 
             if (Doomsayer.doomsayer != null && CachedPlayer.LocalPlayer.PlayerId == Doomsayer.doomsayer.PlayerId) guesserRole = RoleId.Doomsayer;
 
             switch (guesserRole)
             {
-                case RoleId.Doomsayer when !Doomsayer.canGuessImpostor && roleInfo.roleTeam == RoleTeam.Impostor:
-                case RoleId.Doomsayer when !Doomsayer.canGuessNeutral && roleInfo.roleTeam == RoleTeam.Neutral:
+                case RoleId.Doomsayer when !Doomsayer.canGuessImpostor && roleInfo.RoleTeam == RoleTeam.Impostor:
+                case RoleId.Doomsayer when !Doomsayer.canGuessNeutral && roleInfo.RoleTeam == RoleTeam.Neutral:
                     continue;
             }
 
-            if (Mayor.mayor != null && Mayor.Revealed && Mayor.Revealed && roleInfo.roleId == RoleId.Mayor) continue;
+            if (Mayor.mayor != null && Mayor.Revealed && Mayor.Revealed && roleInfo.RoleId == RoleId.Mayor) continue;
 
-            if (roleInfo.roleId == RoleId.Poucher) continue;
+            if (roleInfo.RoleId == RoleId.Poucher) continue;
 
-            if (roleInfo.roleTeam == RoleTeam.Modifier)
+            if (roleInfo.RoleTeam == RoleTeam.Modifier)
             {
                 // Allow Guessing the following mods: Bait, TieBreaker, Bloody, and VIP
                 if (MapOption.allowModGuess && !roleInfo.isGuessable) continue;
             }
 
-            if (roleInfo.roleId == guesserRole ||
-                (!HandleGuesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser &&
-                roleInfo.roleId == RoleId.Spy && !HandleGuesser.isGuesserGm) ||
-                (!evilGuesserCanGuessCrewmate && guesserRole == RoleId.EvilGuesser &&
-                roleInfo.roleId == RoleId.Crewmate)) continue; // Not guessable roles & modifier
+            if (roleInfo.RoleId == guesserRole ||
+                (!HandleGuesser.evilGuesserCanGuessSpy && guesserRole == RoleId.Assassin &&
+                roleInfo.RoleId == RoleId.Spy && !HandleGuesser.isGuesserGm) ||
+                (!Assassin.evilGuesserCanGuessCrewmate && guesserRole == RoleId.Assassin &&
+                roleInfo.RoleId == RoleId.Crewmate)) continue; // Not guessable roles & modifier
 
             switch (HandleGuesser.isGuesserGm)
             {
-                case true when roleInfo.roleId is RoleId.NiceGuesser or RoleId.EvilGuesser:
+                case true when roleInfo.RoleId is RoleId.Vigilante or RoleId.Assassin:
                 case true when CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor &&
-                               !HandleGuesser.evilGuesserCanGuessSpy && roleInfo.roleId == RoleId.Spy:
+                               !HandleGuesser.evilGuesserCanGuessSpy && roleInfo.RoleId == RoleId.Spy:
                     continue; // remove Guesser for guesser game mode
             }
 
             // remove all roles that cannot spawn due to the settings from the ui.
             var roleData = RoleManagerSelectRolesPatch.getRoleAssignmentData();
-            switch (roleInfo.roleId)
+            switch (roleInfo.RoleId)
             {
                 case RoleId.Pursuer when CustomOptionHolder.lawyerSpawnRate.getSelection() == 0
                                       && CustomOptionHolder.executionerSpawnRate.getSelection() == 0:
@@ -312,7 +277,7 @@ public static class Guesser
             {
                 var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
                 var numberOfLeftTasks = playerTotal - playerCompleted;
-                if (numberOfLeftTasks <= Snitch.taskCountForReveal && roleInfo.roleId == RoleId.Snitch) continue;
+                if (numberOfLeftTasks <= Snitch.taskCountForReveal && roleInfo.RoleId == RoleId.Snitch) continue;
             }
             CreateRole(roleInfo);
         }
@@ -320,10 +285,10 @@ public static class Guesser
 
         void CreateRole(RoleInfo roleInfo = null)
         {
-            RoleTeam team = roleInfo?.roleTeam ?? RoleTeam.Crewmate;
-            Color color = roleInfo?.color ?? Color.white;
-            string NameKey = roleInfo?.name ?? "Crewmate";
-            RoleId role = roleInfo?.roleId ?? RoleId.Crewmate;
+            RoleTeam team = roleInfo?.RoleTeam ?? RoleTeam.Crewmate;
+            Color color = roleInfo?.Color ?? Color.white;
+            string NameKey = roleInfo?.Name ?? "Crewmate";
+            RoleId role = roleInfo?.RoleId ?? RoleId.Crewmate;
 
             Transform buttonParent = new GameObject().transform;
             buttonParent.SetParent(container);
@@ -342,7 +307,7 @@ public static class Guesser
             int col = i[(int)team] % 5;
             buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -200f);
             buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
-            label.text = cs(roleInfo.color, roleInfo.name);
+            label.text = cs(roleInfo.Color, roleInfo.Name);
             label.alignment = TextAlignmentOptions.Center;
             label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
             label.transform.localScale *= 1.6f;
@@ -403,7 +368,7 @@ public static class Guesser
 
                     foreach (var role in mainRoleInfo)
                     {
-                        if (role.roleId == roleInfo.roleId)
+                        if (role.roleId == roleInfo.RoleId)
                         {
                             dyingTarget = focusedTarget;
                             continue;
@@ -416,9 +381,9 @@ public static class Guesser
                     writer.Write(CachedPlayer.LocalPlayer.PlayerId);
                     writer.Write(dyingTarget.PlayerId);
                     writer.Write(focusedTarget.PlayerId);
-                    writer.Write((byte)roleInfo.roleId);
+                    writer.Write((byte)roleInfo.RoleId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.guesserShoot(CachedPlayer.LocalPlayer.PlayerId, dyingTarget.PlayerId, focusedTarget.PlayerId, (byte)roleInfo.roleId);
+                    RPCProcedure.guesserShoot(CachedPlayer.LocalPlayer.PlayerId, dyingTarget.PlayerId, focusedTarget.PlayerId, (byte)roleInfo.RoleId);
 
                     // Reset the GUI
                     __instance.playerStates.ForEach(x => x.gameObject.SetActive(true));

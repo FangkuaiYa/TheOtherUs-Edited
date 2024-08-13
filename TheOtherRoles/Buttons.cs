@@ -356,7 +356,7 @@ internal static class HudManagerStartPatch
                     });
             // Report Button
             addReplacementHandcuffedButton(arsonistButton,
-                !CachedPlayer.LocalPlayer.Data.Role.IsImpostor
+                !CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor
                     ? new Vector3(-1f, -0.06f, 0)
                     : ButtonPositions.lowerRowRight,
                 () =>
@@ -520,7 +520,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Engineer.engineer != null && Engineer.engineer == CachedPlayer.LocalPlayer.PlayerControl &&
-                       Engineer.remainingFixes > 0 && Engineer.remoteFix && !CachedPlayer.LocalPlayer.Data.IsDead;
+                       Engineer.remainingFixes > 0 && Engineer.remoteFix && !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -604,7 +604,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Sheriff.sheriff != null && Sheriff.sheriff == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -644,7 +644,7 @@ internal static class HudManagerStartPatch
                 return ((Deputy.deputy != null && Deputy.deputy == CachedPlayer.LocalPlayer.PlayerControl) ||
                         (Sheriff.sheriff != null && Sheriff.sheriff == CachedPlayer.LocalPlayer.PlayerControl &&
                          Sheriff.sheriff == Sheriff.formerDeputy && Deputy.keepsHandcuffsOnPromotion)) &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -685,7 +685,7 @@ internal static class HudManagerStartPatch
             {
                 return TimeMaster.timeMaster != null &&
                        TimeMaster.timeMaster == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () =>
@@ -720,7 +720,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Veteran.veteran != null && Veteran.veteran == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () =>
@@ -764,7 +764,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Medic.medic != null && Medic.medic == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -801,7 +801,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Doomsayer.doomsayer != null && Doomsayer.doomsayer == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -950,7 +950,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Shifter.shifter != null && Shifter.shifter == CachedPlayer.LocalPlayer.PlayerControl &&
-                       Shifter.futureShift == null && !CachedPlayer.LocalPlayer.Data.IsDead;
+                       Shifter.futureShift == null && !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -979,7 +979,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Disperser.disperser != null && Disperser.disperser == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () => { return Disperser.remainingDisperses > 0 && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () => { if (Disperser.remainingDisperses > 0) disperserDisperseButton.Timer = disperserDisperseButton.MaxTimer; },
@@ -1019,7 +1019,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Mayor.mayor != null && Mayor.mayor == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Mayor.meetingButton;
+                       !CachedPlayer.LocalPlayer.IsDead && Mayor.meetingButton;
             },
             () =>
             {
@@ -1075,7 +1075,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return ButtonBarry.buttonBarry != null && ButtonBarry.buttonBarry == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1129,7 +1129,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Morphling.morphling != null && Morphling.morphling == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1182,7 +1182,7 @@ internal static class HudManagerStartPatch
             {
                 return Camouflager.camouflager != null &&
                        Camouflager.camouflager == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () => { return !isActiveCamoComms() && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () =>
@@ -1214,7 +1214,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () => { return true; },
             () =>
@@ -1244,13 +1244,13 @@ internal static class HudManagerStartPatch
                 }
 
                 if (Hacker.cantMove) CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
-                CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                CachedPlayer.LocalPlayer.Transform.Halt(); // Stop current movement 
                 Hacker.chargesAdminTable--;
             },
             () =>
             {
                 return Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1321,14 +1321,14 @@ internal static class HudManagerStartPatch
                 }
 
                 if (Hacker.cantMove) CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
-                CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                CachedPlayer.LocalPlayer.Transform.Halt(); // Stop current movement 
 
                 Hacker.chargesVitals--;
             },
             () =>
             {
                 return Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead &&
+                       !CachedPlayer.LocalPlayer.IsDead &&
                        GameOptionsManager.Instance.currentGameOptions.MapId != 0 &&
                        GameOptionsManager.Instance.currentNormalGameOptions.MapId != 3;
             },
@@ -1392,7 +1392,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Tracker.tracker != null && Tracker.tracker == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1418,7 +1418,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Tracker.tracker != null && Tracker.tracker == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Tracker.canTrackCorpses;
+                       !CachedPlayer.LocalPlayer.IsDead && Tracker.canTrackCorpses;
             },
             () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () =>
@@ -1452,7 +1452,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return BodyGuard.bodyguard != null && BodyGuard.bodyguard == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1486,7 +1486,7 @@ internal static class HudManagerStartPatch
             {
                 return PrivateInvestigator.privateInvestigator != null &&
                        PrivateInvestigator.privateInvestigator == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1595,7 +1595,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Vampire.vampire != null && Vampire.vampire == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1650,7 +1650,7 @@ internal static class HudManagerStartPatch
             },
             () =>
             {
-                return Vampire.garlicButton && !Vampire.localPlacedGarlic && !CachedPlayer.LocalPlayer.Data.IsDead &&
+                return Vampire.garlicButton && !Vampire.localPlacedGarlic && !CachedPlayer.LocalPlayer.IsDead &&
                        Vampire.garlicsActive && !HideNSeek.isHideNSeekGM && !PropHunt.isPropHuntGM;
             },
             () =>
@@ -1726,7 +1726,7 @@ internal static class HudManagerStartPatch
             {
                 return Portalmaker.portalmaker != null &&
                        Portalmaker.portalmaker == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Portal.secondPortal == null;
+                       !CachedPlayer.LocalPlayer.IsDead && Portal.secondPortal == null;
             },
             () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove && Portal.secondPortal == null; },
             () => { portalmakerPlacePortalButton.Timer = portalmakerPlacePortalButton.MaxTimer; },
@@ -1751,9 +1751,9 @@ internal static class HudManagerStartPatch
                     entry = CachedPlayer.LocalPlayer.transform.position;
                 }
 
-                CachedPlayer.LocalPlayer.NetTransform.RpcSnapTo(entry);
+                CachedPlayer.LocalPlayer.Transform.RpcSnapTo(entry);
 
-                if (!CachedPlayer.LocalPlayer.Data.IsDead)
+                if (!CachedPlayer.LocalPlayer.IsDead)
                 {
                     // Ghosts can portal too, but non-blocking and only with a local animation
                     var writer = AmongUsClient.Instance.StartRpcImmediately(
@@ -1772,11 +1772,11 @@ internal static class HudManagerStartPatch
                     {
                         // Delayed action
                         CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
-                        CachedPlayer.LocalPlayer.NetTransform.Halt();
+                        CachedPlayer.LocalPlayer.Transform.Halt();
                         if (p >= 0.5f && p <= 0.53f && !didTeleport && !MeetingHud.Instance)
                         {
                             if (SubmergedCompatibility.IsSubmerged) SubmergedCompatibility.ChangeFloor(exit.y > -7);
-                            CachedPlayer.LocalPlayer.NetTransform.RpcSnapTo(exit);
+                            CachedPlayer.LocalPlayer.Transform.RpcSnapTo(exit);
                             didTeleport = true;
                         }
 
@@ -1815,7 +1815,7 @@ internal static class HudManagerStartPatch
                 var didTeleport = false;
                 var exit = Portal.secondPortal.portalGameObject.transform.position;
 
-                if (!CachedPlayer.LocalPlayer.Data.IsDead)
+                if (!CachedPlayer.LocalPlayer.IsDead)
                 {
                     // Ghosts can portal too, but non-blocking and only with a local animation
                     var writer = AmongUsClient.Instance.StartRpcImmediately(
@@ -1834,11 +1834,11 @@ internal static class HudManagerStartPatch
                     {
                         // Delayed action
                         CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
-                        CachedPlayer.LocalPlayer.NetTransform.Halt();
+                        CachedPlayer.LocalPlayer.Transform.Halt();
                         if (p >= 0.5f && p <= 0.53f && !didTeleport && !MeetingHud.Instance)
                         {
                             if (SubmergedCompatibility.IsSubmerged) SubmergedCompatibility.ChangeFloor(exit.y > -7);
-                            CachedPlayer.LocalPlayer.NetTransform.RpcSnapTo(exit);
+                            CachedPlayer.LocalPlayer.Transform.RpcSnapTo(exit);
                             didTeleport = true;
                         }
 
@@ -1897,7 +1897,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Jackal.canCreateSidekick && Jackal.jackal != null &&
-                       Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead;
+                       Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1926,7 +1926,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Jackal.jackal != null && Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -1954,7 +1954,7 @@ internal static class HudManagerStartPatch
             () =>
             {   /* Can See */
                 return Jackal.jackal != null && Jackal.canSwoop &&
-                       Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead;
+                       Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {   /* On Click */
@@ -1991,7 +1991,7 @@ internal static class HudManagerStartPatch
             {
                 return Sidekick.canKill && Sidekick.sidekick != null &&
                        Sidekick.sidekick == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2017,7 +2017,7 @@ internal static class HudManagerStartPatch
                 swooperKillButton.Timer = swooperKillButton.MaxTimer;
                 Swooper.currentTarget = null;
             },
-            () => { return Swooper.swooper != null && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+            () => { return Swooper.swooper != null && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.IsDead; },
             () => { showTargetNameOnButton(Swooper.currentTarget, swooperKillButton, getString("killButtonText")); return Swooper.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () => { swooperKillButton.Timer = swooperKillButton.MaxTimer; },
             __instance.KillButton.graphic.sprite,
@@ -2036,7 +2036,7 @@ internal static class HudManagerStartPatch
                 AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
                 RPCProcedure.setSwoop(Swooper.swooper.PlayerId, byte.MinValue);
             },
-            () => { /* Can See */ return Swooper.swooper != null && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+            () => { /* Can See */ return Swooper.swooper != null && Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.IsDead; },
             () => {  /* On Click */ return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () =>
             {  /* On Meeting End */
@@ -2072,7 +2072,7 @@ internal static class HudManagerStartPatch
             {
                 return Pavlovsdogs.pavlovsdogs != null
                        && Pavlovsdogs.pavlovsdogs.Any(x => x == CachedPlayer.LocalPlayer.PlayerControl)
-                       && !CachedPlayer.LocalPlayer.Data.IsDead;
+                       && !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2133,7 +2133,7 @@ internal static class HudManagerStartPatch
             {
                 return Pavlovsdogs.pavlovsowner != null
                     && Pavlovsdogs.pavlovsowner == CachedPlayer.LocalPlayer.PlayerControl
-                    && !CachedPlayer.LocalPlayer.Data.IsDead
+                    && !CachedPlayer.LocalPlayer.IsDead
                     && Pavlovsdogs.canCreateDog;
             },
             () =>
@@ -2178,7 +2178,7 @@ internal static class HudManagerStartPatch
             {
                 /* Can See */
                 return Miner.miner != null && Miner.miner == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2220,7 +2220,7 @@ internal static class HudManagerStartPatch
             {
                 /* Can See */
                 return Bomber.bomber != null && Bomber.bomber == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2277,7 +2277,7 @@ internal static class HudManagerStartPatch
             {
                 /* Can See */
                 return Bomber.bomber != null && Bomber.hasBomb == CachedPlayer.LocalPlayer.PlayerControl &&
-                       Bomber.bombActive && !CachedPlayer.LocalPlayer.Data.IsDead;
+                       Bomber.bombActive && !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2309,7 +2309,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Werewolf.werewolf != null && Werewolf.werewolf == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Werewolf.canKill;
+                       !CachedPlayer.LocalPlayer.IsDead && Werewolf.canKill;
             },
             () =>
             {
@@ -2334,7 +2334,7 @@ internal static class HudManagerStartPatch
             {
                 /* Can See */
                 return Werewolf.werewolf != null && Werewolf.werewolf == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2386,7 +2386,7 @@ internal static class HudManagerStartPatch
             {
                 return Juggernaut.juggernaut != null &&
                        Juggernaut.juggernaut == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2419,7 +2419,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Eraser.eraser != null && Eraser.eraser == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2453,7 +2453,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Trickster.trickster != null && Trickster.trickster == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && !JackInTheBox.hasJackInTheBoxLimitReached();
+                       !CachedPlayer.LocalPlayer.IsDead && !JackInTheBox.hasJackInTheBoxLimitReached();
             },
             () =>
             {
@@ -2479,7 +2479,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Trickster.trickster != null && Trickster.trickster == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead
+                       !CachedPlayer.LocalPlayer.IsDead
                        && JackInTheBox.hasJackInTheBoxLimitReached() && JackInTheBox.boxesConvertedToVents;
             },
             () =>
@@ -2547,7 +2547,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Cleaner.cleaner != null && Cleaner.cleaner == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2568,7 +2568,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Butcher.butcher != null && Butcher.butcher == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Butcher.canDissection;
+                       !CachedPlayer.LocalPlayer.IsDead && Butcher.canDissection;
             },
             () =>
             {
@@ -2667,7 +2667,7 @@ internal static class HudManagerStartPatch
             {
                 return Undertaker.undertaker != null &&
                        Undertaker.undertaker == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2735,7 +2735,7 @@ internal static class HudManagerStartPatch
                     {
                         AntiTeleport.position = CachedPlayer.LocalPlayer.transform.position;
                         CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
-                        CachedPlayer.LocalPlayer.NetTransform
+                        CachedPlayer.LocalPlayer.Transform
                             .Halt(); // Stop current movement so the warlock is not just running straight into the next object
                         FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime,
                             new Action<float>(p =>
@@ -2762,7 +2762,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Warlock.warlock != null && Warlock.warlock == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -2823,7 +2823,7 @@ internal static class HudManagerStartPatch
             {
                 return SecurityGuard.securityGuard != null &&
                        SecurityGuard.securityGuard == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews >=
+                       !CachedPlayer.LocalPlayer.IsDead && SecurityGuard.remainingScrews >=
                        Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice);
             },
             () =>
@@ -2901,13 +2901,13 @@ internal static class HudManagerStartPatch
                 SecurityGuard.charges--;
 
                 if (SecurityGuard.cantMove) CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
-                CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                CachedPlayer.LocalPlayer.Transform.Halt(); // Stop current movement 
             },
             () =>
             {
                 return SecurityGuard.securityGuard != null &&
                        SecurityGuard.securityGuard == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews <
+                       !CachedPlayer.LocalPlayer.IsDead && SecurityGuard.remainingScrews <
                        Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice)
                        && !SubmergedCompatibility.IsSubmerged;
             },
@@ -2976,7 +2976,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Arsonist.arsonist != null && Arsonist.arsonist == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3069,7 +3069,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Vulture.vulture != null && Vulture.vulture == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3119,7 +3119,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Amnisiac.amnisiac != null && Amnisiac.amnisiac == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3148,7 +3148,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Medium.medium != null && Medium.medium == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3258,7 +3258,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Pursuer.pursuer != null && Pursuer.pursuer.Contains(CachedPlayer.LocalPlayer.PlayerControl) &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Pursuer.blanks < Pursuer.blanksNumber;
+                       !CachedPlayer.LocalPlayer.IsDead && Pursuer.blanks < Pursuer.blanksNumber;
             },
             () =>
             {
@@ -3298,7 +3298,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Survivor.survivor != null && Survivor.survivor.Contains(CachedPlayer.LocalPlayer.PlayerControl) &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Survivor.vestEnable && Survivor.remainingVests > 0;
+                       !CachedPlayer.LocalPlayer.IsDead && Survivor.vestEnable && Survivor.remainingVests > 0;
             },
             () =>
             {
@@ -3354,7 +3354,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Survivor.survivor != null && Survivor.survivor.Contains(CachedPlayer.LocalPlayer.PlayerControl) &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead && Survivor.blanksEnable && Survivor.remainingBlanks > 0;
+                       !CachedPlayer.LocalPlayer.IsDead && Survivor.blanksEnable && Survivor.remainingBlanks > 0;
             },
             () =>
             {
@@ -3394,7 +3394,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Witch.witch != null && Witch.witch == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3685,7 +3685,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Ninja.ninja != null && Ninja.ninja == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3731,7 +3731,7 @@ internal static class HudManagerStartPatch
             {
                 return Blackmailer.blackmailer != null &&
                        Blackmailer.blackmailer == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3771,7 +3771,7 @@ internal static class HudManagerStartPatch
             {
                 return Cultist.needsFollower && Cultist.cultist != null &&
                        Cultist.cultist == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3808,7 +3808,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Trapper.trapper != null && Trapper.trapper == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3861,7 +3861,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Terrorist.terrorist != null && Terrorist.terrorist == CachedPlayer.LocalPlayer.PlayerControl &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove && !Terrorist.isPlanted; },
             () =>
@@ -3887,7 +3887,7 @@ internal static class HudManagerStartPatch
             () => { defuseButton.HasEffect = true; },
             () =>
             {
-                return Terrorist.bomb != null && Bomb.canDefuse && !CachedPlayer.LocalPlayer.Data.IsDead;
+                return Terrorist.bomb != null && Bomb.canDefuse && !CachedPlayer.LocalPlayer.IsDead;
             },
             () =>
             {
@@ -3976,7 +3976,7 @@ internal static class HudManagerStartPatch
             () =>
             {
                 return Thief.thief != null && CachedPlayer.LocalPlayer.PlayerControl == Thief.thief &&
-                       !CachedPlayer.LocalPlayer.Data.IsDead;
+                       !CachedPlayer.LocalPlayer.IsDead;
             },
             () => { return Thief.currentTarget != null && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () => { thiefKillButton.Timer = thiefKillButton.MaxTimer; },
@@ -4041,7 +4041,7 @@ internal static class HudManagerStartPatch
                     SoundEffectsManager.play("morphlingMorph");
                 }
             },
-            () => { return Yoyo.yoyo != null && Yoyo.yoyo == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+            () => { return Yoyo.yoyo != null && Yoyo.yoyo == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.IsDead; },
             () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
             () =>
             {
@@ -4118,7 +4118,7 @@ internal static class HudManagerStartPatch
                    MapBehaviour.Instance.ShowCountOverlay(allowedToMove: true, showLivePlayerPosition: true, includeDeadBodies: true);
                }
            },
-           () => { return Yoyo.yoyo != null && Yoyo.yoyo == CachedPlayer.LocalPlayer.PlayerControl && Yoyo.hasAdminTable && !CachedPlayer.LocalPlayer.Data.IsDead; },
+           () => { return Yoyo.yoyo != null && Yoyo.yoyo == CachedPlayer.LocalPlayer.PlayerControl && Yoyo.hasAdminTable && !CachedPlayer.LocalPlayer.IsDead; },
            () =>
            {
                return true;
@@ -4150,8 +4150,8 @@ internal static class HudManagerStartPatch
             () => { toggleZoom(); },
             () =>
             {
-                if (CachedPlayer.LocalPlayer.PlayerControl == null || !CachedPlayer.LocalPlayer.Data.IsDead || (CachedPlayer.LocalPlayer.Data.Role.IsImpostor && !CustomOptionHolder.deadImpsBlockSabotage.getBool())) return false;
-                var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
+                if (CachedPlayer.LocalPlayer.PlayerControl == null || !CachedPlayer.LocalPlayer.IsDead || (CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor && !CustomOptionHolder.deadImpsBlockSabotage.getBool())) return false;
+                var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.PlayerInfo);
                 var numberOfLeftTasks = playerTotal - playerCompleted;
                 return numberOfLeftTasks <= 0 || !CustomOptionHolder.finishTasksBeforeHauntingOrZoomingOut.getBool();
             },
@@ -4178,7 +4178,7 @@ internal static class HudManagerStartPatch
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shareTimer(Hunter.lightPunish);
             },
-            () => { return HideNSeek.isHunter() && !CachedPlayer.LocalPlayer.Data.IsDead; },
+            () => { return HideNSeek.isHunter() && !CachedPlayer.LocalPlayer.IsDead; },
             () => { return true; },
             () =>
             {
@@ -4211,7 +4211,7 @@ internal static class HudManagerStartPatch
                     MapBehaviour.Instance.ShowCountOverlay(true, true, false);
                 }
 
-                CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                CachedPlayer.LocalPlayer.Transform.Halt(); // Stop current movement 
 
                 var writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                     (byte)CustomRPC.ShareTimer, SendOption.Reliable);
@@ -4219,7 +4219,7 @@ internal static class HudManagerStartPatch
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shareTimer(Hunter.AdminPunish);
             },
-            () => { return HideNSeek.isHunter() && !CachedPlayer.LocalPlayer.Data.IsDead; },
+            () => { return HideNSeek.isHunter() && !CachedPlayer.LocalPlayer.IsDead; },
             () => { return true; },
             () =>
             {
@@ -4254,7 +4254,7 @@ internal static class HudManagerStartPatch
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shareTimer(Hunter.ArrowPunish);
             },
-            () => { return HideNSeek.isHunter() && !CachedPlayer.LocalPlayer.Data.IsDead; },
+            () => { return HideNSeek.isHunter() && !CachedPlayer.LocalPlayer.IsDead; },
             () => { return true; },
             () =>
             {
@@ -4288,7 +4288,7 @@ internal static class HudManagerStartPatch
 
                 Hunted.shieldCount--;
             },
-            () => { return HideNSeek.isHunted() && !CachedPlayer.LocalPlayer.Data.IsDead; },
+            () => { return HideNSeek.isHunted() && !CachedPlayer.LocalPlayer.IsDead; },
             () =>
             {
                 if (huntedShieldCountText != null) huntedShieldCountText.text = $"{Hunted.shieldCount}";
@@ -4505,7 +4505,7 @@ internal static class HudManagerStartPatch
                     MapBehaviour.Instance.ShowCountOverlay(true, true, false);
                 }
 
-                CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement
+                CachedPlayer.LocalPlayer.Transform.Halt(); // Stop current movement
             },
             () =>
             {

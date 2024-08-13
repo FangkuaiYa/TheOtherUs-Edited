@@ -32,19 +32,19 @@ public static class HideNSeek
 
     public static bool isHunter()
     {
-        return isHideNSeekGM && CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor;
+        return isHideNSeekGM && CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor;
     }
 
     public static List<CachedPlayer> getHunters()
     {
         var hunters = new List<CachedPlayer>(CachedPlayer.AllPlayers);
-        hunters.RemoveAll(x => !x.Data.Role.IsImpostor);
+        hunters.RemoveAll(x => !x.PlayerInfo.Role.IsImpostor);
         return hunters;
     }
 
     public static bool isHunted()
     {
-        return isHideNSeekGM && CachedPlayer.LocalPlayer != null && !CachedPlayer.LocalPlayer.Data.Role.IsImpostor;
+        return isHideNSeekGM && CachedPlayer.LocalPlayer != null && !CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor;
     }
 
     public static void clearAndReload()
@@ -164,7 +164,7 @@ public static class HideSpeedFix
         if (__instance != null
             && __instance.AmOwner
             && GameData.Instance
-            && !CachedPlayer.LocalPlayer.Data.IsDead
+            && !CachedPlayer.LocalPlayer.IsDead
             && __instance.myPlayer.CanMove
             && HideNSeek.isHideNSeekGM)
         {

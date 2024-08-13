@@ -40,7 +40,7 @@ public static class Arsonist
     {
         return CachedPlayer.AllPlayers.All(x =>
         {
-            return x.PlayerControl == arsonist || x.Data.IsDead || x.Data.Disconnected ||
+            return x.PlayerControl == arsonist || x.IsDead || x.Disconnected ||
                    dousedPlayers.Any(y => y.PlayerId == x.PlayerId);
         });
     }

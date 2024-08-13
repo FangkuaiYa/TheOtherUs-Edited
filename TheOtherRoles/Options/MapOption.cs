@@ -69,19 +69,19 @@ internal class MapOption
 
     public static bool canUseCameras => restrictDevices == 0 || restrictCamerasTime > 0f ||
                                         CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker ||
-                                        CachedPlayer.LocalPlayer.Data.IsDead;
+                                        CachedPlayer.LocalPlayer.IsDead;
 
     public static bool couldUseCameras => restrictDevices == 0 || restrictCamerasTimeMax > 0f ||
                                           CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker ||
-                                          CachedPlayer.LocalPlayer.Data.IsDead;
+                                          CachedPlayer.LocalPlayer.IsDead;
 
     public static bool canUseVitals => restrictDevices == 0 || restrictVitalsTime > 0f ||
                                        CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker ||
-                                       CachedPlayer.LocalPlayer.Data.IsDead;
+                                       CachedPlayer.LocalPlayer.IsDead;
 
     public static bool couldUseVitals => restrictDevices == 0 || restrictVitalsTimeMax > 0f ||
                                          CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker ||
-                                         CachedPlayer.LocalPlayer.Data.IsDead;
+                                         CachedPlayer.LocalPlayer.IsDead;
 
     public static void clearAndReloadMapOptions()
     {

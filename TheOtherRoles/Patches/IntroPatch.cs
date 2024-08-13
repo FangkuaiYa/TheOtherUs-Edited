@@ -220,7 +220,7 @@ internal class IntroPatch
         }
 
         // Add the Spy to the Impostor team (for the Impostors)
-        if (Spy.spy != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor)
+        if (Spy.spy != null && CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor)
         {
             var players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             var fakeImpostorTeam =
@@ -236,9 +236,9 @@ internal class IntroPatch
     public static void setupIntroTeam(IntroCutscene __instance, ref List<PlayerControl> yourTeam)
     {
         var infos = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
-        var roleInfo = infos.FirstOrDefault(info => info.roleTeam != RoleTeam.Modifier);
+        var roleInfo = infos.FirstOrDefault(info => info.RoleTeam != RoleTeam.Modifier);
         if (roleInfo == null) return;
-        if (roleInfo.roleTeam == RoleTeam.Neutral)
+        if (roleInfo.RoleTeam == RoleTeam.Neutral)
         {
             var neutralColor = new Color32(76, 84, 78, 255);
             __instance.BackgroundBar.material.color = roleInfo.color;
@@ -292,7 +292,7 @@ internal class IntroPatch
         {
             // Don't override the intro of the vanilla roles
             var infos = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
-            var roleInfo = infos.FirstOrDefault(info => info.roleTeam != RoleTeam.Modifier);
+            var roleInfo = infos.FirstOrDefault(info => info.RoleTeam != RoleTeam.Modifier);
             var modifierInfo = infos.FirstOrDefault(info => info.isModifier);
 
             __instance.RoleBlurbText.text = "";

@@ -107,24 +107,24 @@ public class OnGameEndPatch
         foreach (var playerControl in CachedPlayer.AllPlayers)
         {
             var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
-            var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(playerControl.Data);
+            var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(playerControl.PlayerInfo);
             var isGuesser = HandleGuesser.isGuesserGm && HandleGuesser.isGuesser(playerControl.PlayerId);
             int? killCount = GameHistory.deadPlayers.FindAll(x => x.killerIfExisting != null && x.killerIfExisting.PlayerId == playerControl.PlayerId).Count;
             if (killCount == 0 && !(new List<RoleInfo>
                           { RoleInfo.sheriff, RoleInfo.jackal, RoleInfo.sidekick, RoleInfo.thief, RoleInfo.juggernaut }
                       .Contains(RoleInfo.getRoleInfoForPlayer(playerControl, false).FirstOrDefault()) ||
-                  playerControl.Data.Role.IsImpostor)) killCount = null;
+                  playerControl.PlayerInfo.Role.IsImpostor)) killCount = null;
             var roleString = RoleInfo.GetRolesString(playerControl, true);
             AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo
             {
-                PlayerName = playerControl.Data.PlayerName,
+                PlayerName = playerControl.PlayerName,
                 Roles = roles,
                 RoleNames = roleString,
                 TasksTotal = tasksTotal,
                 TasksCompleted = tasksCompleted,
                 IsGuesser = isGuesser,
                 Kills = killCount,
-                IsAlive = !playerControl.Data.IsDead
+                IsAlive = !playerControl.IsDead
             });
 
             if (Cultist.isCultistGame) GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors = 2;
@@ -549,7 +549,7 @@ public class EndGameManagerSetUpPatch
             foreach (var roles in from data in AdditionalTempData.playerRoles
                                   where data.PlayerName == winningPlayerData2.PlayerName
                                   select poolablePlayer.cosmetics.nameText.text +=
-                         $"\n{string.Join("\n", data.Roles.Select(x => cs(x.color, x.name)))}")
+                         $"\n{string.Join("\n", data.Roles.Select(x => cs(x.Color, x.Name)))}")
             {
             }
         }

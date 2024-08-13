@@ -18,7 +18,7 @@ internal class HudManagerUpdatePatch
     private static void resetNameTagsAndColors()
     {
         var localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
-        var myData = CachedPlayer.LocalPlayer.Data;
+        var myData = CachedPlayer.LocalPlayer.PlayerInfo;
         var amImpostor = myData.Role.IsImpostor;
         var morphTimerNotUp = Morphling.morphTimer > 0f;
         var morphTargetNotNull = Morphling.morphTarget != null;
@@ -80,8 +80,8 @@ internal class HudManagerUpdatePatch
     private static void setNameColors()
     {
         var localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
-        var localRole = RoleInfo.getRoleInfoForPlayer(localPlayer, false).FirstOrDefault();
-        setPlayerNameColor(localPlayer, localRole.color);
+        RoleInfo localRole = RoleInfo.getRoleInfoForPlayer(localPlayer, false).FirstOrDefault();
+        setPlayerNameColor(localPlayer, localRole.Color);
 
         if (Sheriff.sheriff != null && Sheriff.sheriff == localPlayer)
         {
@@ -367,7 +367,7 @@ internal class HudManagerUpdatePatch
 
     private static void updateImpostorKillButton(HudManager __instance)
     {
-        if (!CachedPlayer.LocalPlayer.Data.Role.IsImpostor) return;
+        if (!CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor) return;
         if (MeetingHud.Instance)
         {
             __instance.KillButton.Hide();

@@ -62,8 +62,6 @@ public static class CredentialsPatch
     {
         public static SpriteRenderer renderer;
         public static Sprite bannerSprite;
-        public static Sprite horseBannerSprite;
-        public static Sprite banner2Sprite;
         private static PingTracker instance;
 
         public static GameObject motdObject;
@@ -112,32 +110,7 @@ public static class CredentialsPatch
 
         public static void loadSprites()
         {
-            if (bannerSprite == null)
-                bannerSprite = loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
-            if (banner2Sprite == null)
-                banner2Sprite = loadSpriteFromResources("TheOtherRoles.Resources.Banner2.png", 300f);
-            if (horseBannerSprite == null)
-                horseBannerSprite =
-                    loadSpriteFromResources("TheOtherRoles.Resources.bannerTheHorseRoles.png", 300f);
-        }
-
-        public static void updateSprite()
-        {
-            loadSprites();
-            if (renderer != null)
-            {
-                var fadeDuration = 1f;
-                instance.StartCoroutine(Effects.Lerp(fadeDuration, new Action<float>(p =>
-                {
-                    renderer.color = new Color(1, 1, 1, 1 - p);
-                    if (p == 1)
-                    {
-                        renderer.sprite = bannerSprite;
-                        instance.StartCoroutine(Effects.Lerp(fadeDuration,
-                            new Action<float>(p => { renderer.color = new Color(1, 1, 1, p); })));
-                    }
-                })));
-            }
+            if (bannerSprite == null) bannerSprite = loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
         }
     }
 

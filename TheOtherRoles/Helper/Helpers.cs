@@ -75,6 +75,11 @@ public static class Helpers
     public static bool InGame => AmongUsClient.Instance != null && AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started;
     public static bool IsCountDown => GameStartManager.InstanceExists && GameStartManager.Instance.startState == GameStartManager.StartingStates.Countdown;
     public static bool IsMeeting => InGame && MeetingHud.Instance;
+    public static bool RolesEnabled =>
+        MapOption.gameMode != CustomGamemodes.HideNSeek
+        && MapOption.gameMode != CustomGamemodes.PropHunt
+        && GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.HideNSeek;
+
 
     /// <summary>
     /// 假任务
@@ -115,7 +120,7 @@ public static class Helpers
         if (isRoleAlive(Mayor.mayor)) powerCrewAlive = true;
         if (isRoleAlive(Swapper.swapper)) powerCrewAlive = true;
         if (isRoleAlive(Prosecutor.prosecutor)) powerCrewAlive = true;
-        if (isRoleAlive(Guesser.niceGuesser)) powerCrewAlive = true;
+        if (isRoleAlive(Vigilante.vigilante)) powerCrewAlive = true;
 
         return powerCrewAlive;
     }
@@ -232,7 +237,6 @@ public static class Helpers
             var numberOfTasks = playerTotal - playerCompleted;
             if (numberOfTasks == 0) roleCouldUse = true;
         }
-
         return roleCouldUse;
     }
 
@@ -287,7 +291,7 @@ public static class Helpers
     public static bool isNeutral(PlayerControl player)
     {
         var roleInfo = RoleInfo.getRoleInfoForPlayer(player, false).FirstOrDefault();
-        return roleInfo != null && roleInfo.roleTeam == RoleTeam.Neutral;
+        return roleInfo != null && roleInfo.RoleTeam == RoleTeam.Neutral;
     }
 
     public static bool isKiller(PlayerControl player)
@@ -683,9 +687,9 @@ public static class Helpers
     public static List<RoleInfo> allRoleInfos()
     {
         var allRoleInfo = new List<RoleInfo>();
-        foreach (var role in RoleInfo.allRoleInfos)
+        foreach (var role in RoleInfo.AllRoleInfo)
         {
-            if (role.isModifier) continue;
+            if (role.RoleTeam == RoleTeam.Modifier) continue;
             allRoleInfo.Add(role);
         }
         return allRoleInfo;
@@ -747,7 +751,7 @@ public static class Helpers
 
     public static void refreshRoleDescription(PlayerControl player)
     {
-        var infos = RoleInfo.getRoleInfoForPlayer(player);
+        List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(player);
         List<string> taskTexts = new(infos.Count);
 
         foreach (var roleInfo in infos) taskTexts.Add(getRoleString(roleInfo));
@@ -785,16 +789,16 @@ public static class Helpers
 
     internal static string getRoleString(RoleInfo roleInfo)
     {
-        if (roleInfo.name == "Jackal")
+        if (roleInfo.Name == "Jackal")
         {
             var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-            return cs(roleInfo.color, $"{roleInfo.name}: Kill everyone{getSidekickText}");
+            return cs(roleInfo.Color, $"{roleInfo.Name}: Kill everyone{getSidekickText}");
         }
 
-        if (roleInfo.name == "Invert")
-            return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription} ({Invert.meetings})");
+        if (roleInfo.Name == "Invert")
+            return cs(roleInfo.Color, $"{roleInfo.Name}: {roleInfo.shortDescription} ({Invert.meetings})");
 
-        return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");
+        return cs(roleInfo.Color, $"{roleInfo.Name}: {roleInfo.shortDescription}");
     }
 
     public static bool isDark(byte playerId)

@@ -288,33 +288,6 @@ internal class FastRpcWriter
     }
 }
 
-public static class FastRPCExtension
-{
-    public static Vector2 ReadVector2(this MessageReader reader)
-    {
-        var x = reader.ReadSingle();
-        var y = reader.ReadSingle();
-        return new Vector2(x, y);
-    }
-
-    public static Vector3 ReadVector3(this MessageReader reader)
-    {
-        var x = reader.ReadSingle();
-        var y = reader.ReadSingle();
-        var z = reader.ReadSingle();
-        return new Vector3(x, y, z);
-    }
-
-    public static Rect ReadRect(this MessageReader reader)
-    {
-        var x = reader.ReadSingle();
-        var y = reader.ReadSingle();
-        var width = reader.ReadSingle();
-        var height = reader.ReadSingle();
-        return new Rect(x, y, width, height);
-    }
-}
-
 internal enum RPCSendMode
 {
     SendToAll = 5,

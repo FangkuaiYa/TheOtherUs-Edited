@@ -202,7 +202,7 @@ public class CustomButton
         var localPlayer = CachedPlayer.LocalPlayer;
         var moveable = localPlayer.PlayerControl.moveable;
 
-        if (localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton())
+        if (localPlayer.PlayerInfo == null || MeetingHud.Instance || ExileController.Instance || !HasButton())
         {
             setActive(false);
             return;

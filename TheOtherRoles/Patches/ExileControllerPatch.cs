@@ -251,7 +251,7 @@ internal class ExileControllerWrapUpPatch
                 soul.layer = 5;
                 var rend = soul.AddComponent<SpriteRenderer>();
                 soul.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
-                rend.sprite = Seer.getSoulSprite();
+                rend.sprite = Seer.soulSprite;
 
                 if (Seer.limitSoulDuration)
                 {
@@ -392,6 +392,16 @@ internal class AirshipSpawnInPatch
         Chameleon.lastMoved.Clear();
     }
 }
+
+/*
+[HarmonyPatch(typeof(ExileController), nameof(ExileController.ReEnableGameplay))]
+internal class ExileControllerReEnableGameplayPatch
+{
+    public static void Postfix(ExileController __instance)
+    {
+        OnMeetingEnd();
+    }
+}*/
 
 [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), typeof(StringNames),
     typeof(Il2CppReferenceArray<Il2CppSystem.Object>))]

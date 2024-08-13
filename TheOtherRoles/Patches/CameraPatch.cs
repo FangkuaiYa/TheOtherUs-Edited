@@ -117,7 +117,7 @@ public class CameraPatch
                     if (MapOption.restrictCamerasTime <= 0f &&
                         CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker &&
                         CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard &&
-                        !CachedPlayer.LocalPlayer.Data.IsDead)
+                        !CachedPlayer.LocalPlayer.IsDead)
                     {
                         __instance.Close();
                         return false;
@@ -241,7 +241,7 @@ public class CameraPatch
                 if (MapOption.restrictCamerasTime <= 0f &&
                     CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker &&
                     CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard &&
-                    !CachedPlayer.LocalPlayer.Data.IsDead)
+                    !CachedPlayer.LocalPlayer.IsDead)
                 {
                     __instance.Close();
                     return false;
@@ -314,7 +314,7 @@ public class CameraPatch
                 if (MapOption.restrictCamerasTime <= 0f &&
                     CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker &&
                     CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard &&
-                    !CachedPlayer.LocalPlayer.Data.IsDead)
+                    !CachedPlayer.LocalPlayer.IsDead)
                 {
                     __instance.Close();
                     return false;

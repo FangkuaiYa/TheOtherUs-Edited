@@ -99,7 +99,7 @@ public static class PlayerControlFixedUpdatePatch
                                                         shouldShowGhostInfo());
             }
 
-            if ((CachedPlayer.LocalPlayer.Data.IsDead || (BodyGuard.showShielded && target == BodyGuard.guarded)) && BodyGuard.guarded != null && target == BodyGuard.guarded)
+            if ((CachedPlayer.LocalPlayer.IsDead || (BodyGuard.showShielded && target == BodyGuard.guarded)) && BodyGuard.guarded != null && target == BodyGuard.guarded)
             {
                 hasVisibleShield = true;
                 color = new Color32(205, 150, 100, byte.MaxValue);
@@ -128,10 +128,10 @@ public static class PlayerControlFixedUpdatePatch
 
     private static void setPetVisibility()
     {
-        var localalive = !CachedPlayer.LocalPlayer.Data.IsDead;
+        var localalive = !CachedPlayer.LocalPlayer.IsDead;
         foreach (var player in CachedPlayer.AllPlayers)
         {
-            var playeralive = !player.Data.IsDead;
+            var playeralive = !player.IsDead;
             player.PlayerControl.cosmetics.SetPetVisible((localalive && playeralive) || !localalive);
         }
     }
@@ -150,10 +150,10 @@ public static class PlayerControlFixedUpdatePatch
                     if (CachedPlayer.LocalPlayer.PlayerControl.inVent)
                         foreach (var vent in MapUtilities.CachedShipStatus.AllVents)
                         {
-                            vent.CanUse(CachedPlayer.LocalPlayer.Data, out bool canUse, out bool couldUse);
+                            vent.CanUse(CachedPlayer.LocalPlayer.PlayerInfo, out bool canUse, out bool couldUse);
                             if (canUse)
                             {
-                                CachedPlayer.LocalPlayer.PlayerPhysics.RpcExitVent(vent.Id);
+                                CachedPlayer.LocalPlayer.Physics.RpcExitVent(vent.Id);
                                 vent.SetButtons(false);
                             }
                         }
@@ -306,7 +306,7 @@ public static class PlayerControlFixedUpdatePatch
 
     private static void detectiveUpdateFootPrints()
     {
-        if (Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl) return;
+        if (Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl || Detective.detective.IsDead()) return;
 
         Detective.timer -= Time.fixedDeltaTime;
         if (Detective.timer <= 0f)
@@ -445,7 +445,7 @@ public static class PlayerControlFixedUpdatePatch
         var jackalHighlight = Engineer.highlightForTeamJackal &&
                               (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal ||
                                CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick);
-        var impostorHighlight = Engineer.highlightForImpostors && CachedPlayer.LocalPlayer.Data.Role.IsImpostor;
+        var impostorHighlight = Engineer.highlightForImpostors && CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor;
         if ((jackalHighlight || impostorHighlight) && MapUtilities.CachedShipStatus?.AllVents != null)
             foreach (var vent in MapUtilities.CachedShipStatus.AllVents)
                 try
@@ -470,8 +470,8 @@ public static class PlayerControlFixedUpdatePatch
 
     private static void impostorSetTarget()
     {
-        if (!CachedPlayer.LocalPlayer.Data.Role.IsImpostor || !CachedPlayer.LocalPlayer.PlayerControl.CanMove ||
-            CachedPlayer.LocalPlayer.Data.IsDead)
+        if (!CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor || !CachedPlayer.LocalPlayer.PlayerControl.CanMove ||
+            CachedPlayer.LocalPlayer.IsDead)
         {
             // !isImpostor || !canMove || isDead
             FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(null);
@@ -559,7 +559,7 @@ public static class PlayerControlFixedUpdatePatch
                 return;
             }
 
-            if (Ninja.ninjaMarked != null && !CachedPlayer.LocalPlayer.Data.IsDead)
+            if (Ninja.ninjaMarked != null && !CachedPlayer.LocalPlayer.IsDead)
             {
                 var trackedOnMap = !Ninja.ninjaMarked.Data.IsDead;
                 var position = Ninja.ninjaMarked.transform.position;
@@ -780,10 +780,10 @@ public static class PlayerControlFixedUpdatePatch
 
             if ((Lawyer.lawyerKnowsRole && local == Lawyer.lawyer && p == Lawyer.target) ||
                    (Akujo.knowsRoles && local == Akujo.akujo && (p == Akujo.honmei || Akujo.keeps.Any(x => x.PlayerId == p.PlayerId))) ||
-                   p == local || CachedPlayer.LocalPlayer.Data.IsDead ||
+                   p == local || CachedPlayer.LocalPlayer.IsDead ||
                 (local == Slueth.slueth && Slueth.reported.Any(x => x.PlayerId == p.PlayerId)) ||
-                (MapOption.impostorSeeRoles && Spy.spy == null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor &&
-                 !CachedPlayer.LocalPlayer.Data.IsDead && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)) ||
+                (MapOption.impostorSeeRoles && Spy.spy == null && CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor &&
+                 !CachedPlayer.LocalPlayer.IsDead && p == (p.Data.Role.IsImpostor && !p.Data.IsDead)) ||
                 (local == Poucher.poucher && Poucher.killed.Any(x => x.PlayerId == p.PlayerId)))
             {
                 var playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
@@ -827,8 +827,8 @@ public static class PlayerControlFixedUpdatePatch
                 var playerInfoText = "";
                 var meetingInfoText = "";
                 if (p == local || (MapOption.impostorSeeRoles && Spy.spy == null &&
-                                                                    CachedPlayer.LocalPlayer.Data.Role.IsImpostor &&
-                                                                    !CachedPlayer.LocalPlayer.Data.IsDead &&
+                                                                    CachedPlayer.LocalPlayer.PlayerInfo.Role.IsImpostor &&
+                                                                    !CachedPlayer.LocalPlayer.IsDead &&
                                                                     p == (p.Data.Role.IsImpostor && !p.Data.IsDead)))
                 {
                     if (p.Data.IsDead) roleNames = roleText;
@@ -1284,7 +1284,7 @@ public static class PlayerControlFixedUpdatePatch
         var arrowUpdate = true;
         var index = 0;
 
-        if (arrowUpdate && !CachedPlayer.LocalPlayer.Data.IsDead)
+        if (arrowUpdate && !CachedPlayer.LocalPlayer.IsDead)
         {
             foreach (var arrow in Radar.localArrows) Object.Destroy(arrow.arrow);
             Radar.ClosestPlayer = GetClosestPlayer(PlayerControl.LocalPlayer,
@@ -1295,7 +1295,7 @@ public static class PlayerControlFixedUpdatePatch
 
         foreach (PlayerControl player in CachedPlayer.AllPlayers)
         {
-            if (arrowUpdate && !CachedPlayer.LocalPlayer.Data.IsDead)
+            if (arrowUpdate && !CachedPlayer.LocalPlayer.IsDead)
             {
                 Radar.localArrows.Add(new Arrow(Radar.color));
                 Radar.localArrows[index].arrow.SetActive(true);
@@ -1500,8 +1500,8 @@ public static class PlayerControlFixedUpdatePatch
     public static void swapperUpdate()
     {
         if (Swapper.swapper == null || CachedPlayer.LocalPlayer.PlayerControl != Swapper.swapper ||
-            CachedPlayer.LocalPlayer.Data.IsDead) return;
-        var (playerCompleted, _) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
+            CachedPlayer.LocalPlayer.IsDead) return;
+        var (playerCompleted, _) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.PlayerInfo);
         if (playerCompleted == Swapper.rechargedTasks)
         {
             Swapper.rechargedTasks += Swapper.rechargeTasksNumber;
@@ -1695,7 +1695,7 @@ public static class PlayerControlFixedUpdatePatch
 
         if (HideNSeek.isHunted() && !Hunted.taskPunish && !HideNSeek.isWaitingTimer)
         {
-            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
+            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.PlayerInfo);
             var numberOfTasks = playerTotal - playerCompleted;
             if (numberOfTasks == 0)
             {
@@ -1915,8 +1915,6 @@ public static class PlayerControlFixedUpdatePatch
 
             //Update pet visibility
             setPetVisibility();
-
-            //RoleClass.FixedUpdate(__instance);
 
             // EvilTrapper
             evilTrapperUpdate();
@@ -2390,7 +2388,7 @@ public static class MurderPlayerPatch
             {
                 color = Color.white;
                 if (target.Data.Role.IsImpostor) color = Color.red;
-                else if (RoleInfo.getRoleInfoForPlayer(target, false).FirstOrDefault().roleTeam == RoleTeam.Neutral) color = Color.blue;
+                else if (RoleInfo.getRoleInfoForPlayer(target, false).FirstOrDefault().RoleTeam == RoleTeam.Neutral) color = Color.blue;
             }
 
             showFlash(color, 1.75f);
@@ -2436,7 +2434,6 @@ public static class MurderPlayerPatch
                 overrideDeathReasonAndKiller(akujoPartner, DeadPlayer.CustomDeathReason.LoverSuicide);
             }
         }
-
     }
 }
 
@@ -2510,7 +2507,6 @@ public static class ExilePlayerPatch
         // Collect dead player info
         var deadPlayer = new DeadPlayer(__instance, DateTime.UtcNow, DeadPlayer.CustomDeathReason.Exile, null);
         deadPlayers.Add(deadPlayer);
-
 
         // Remove fake tasks when player dies
         if (__instance.hasFakeTasks() || __instance == Lawyer.lawyer || __instance == Pursuer.pursuer.Contains(__instance) ||
@@ -2623,7 +2619,7 @@ public static class PlayerPhysicsFixedUpdate
         if (__instance.AmOwner &&
             AmongUsClient.Instance &&
             AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started &&
-            !CachedPlayer.LocalPlayer.Data.IsDead &&
+            !CachedPlayer.LocalPlayer.IsDead &&
             shouldInvert &&
             GameData.Instance &&
             __instance.myPlayer.CanMove) __instance.body.velocity *= -1;
@@ -2631,7 +2627,7 @@ public static class PlayerPhysicsFixedUpdate
         if (__instance.AmOwner &&
                 AmongUsClient.Instance &&
                 AmongUsClient.Instance.GameState == InnerNetClient.GameStates.Started &&
-                !CachedPlayer.LocalPlayer.Data.IsDead &&
+                !CachedPlayer.LocalPlayer.IsDead &&
                 GameData.Instance &&
                 __instance.myPlayer.CanMove)
         {

@@ -77,7 +77,7 @@ public class ModTranslation
     }
 }
 
-internal static class LanguageExtension
+internal static class LanguageTranslate
 {
     internal static string Translate(this string key)
     {
